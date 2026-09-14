@@ -36,13 +36,15 @@ class DecisionNode:
         leaf rather than the prediction from that leaf.
         """
 
-        if self.split == -1:  # categorical
+        if self.split == -1:  
+            # categorical
             return (
                 self.lchild.leaf(x_test)
                 if x_test[self.col] in self.left_cat_values
                 else self.rchild.leaf(x_test)
             )
-        else:  # numeric
+        else:  
+            # numeric
             return (
                 self.lchild.leaf(x_test)
                 if x_test[self.col] < self.split
@@ -80,8 +82,12 @@ def gini(x):
 
     return 1 - np.sum((class_counts / n) ** 2)
 
-#given categorical labels (numerical but no ordinality), output resorted x and y arrays
 def cat_sort(X,y):
+    '''
+    given categorical labels (numerical but no ordinality), output resorted x and y arrays, 
+    sorted by mean y for each label. This ordinality speeds up the 2^(feature values) possibilities than 
+    non-ordered features represent
+    '''
     label_index = 0
     unique_labels, inv = np.unique(X, return_inverse=True)
     label_means = np.bincount(inv, weights=y) / np.bincount(inv)
@@ -182,10 +188,9 @@ def quantile_split(sorted_x, sorted_y, min_samples_leaf, quantiles, current_best
 
 def find_best_split(X, y, loss, min_samples_leaf, max_features, current_depth, label_depth, min_samples_label, thick_trunk):
     #Removes the label feature from allowed feature space
-    #column with label valudes
     label_index = X.shape[1] - 1
     feature_indices = np.arange(X.shape[1])
-    #print('hi')
+
     #allowed non label feature columns
     feature_indices = feature_indices[feature_indices != label_index]
 
@@ -197,7 +202,7 @@ def find_best_split(X, y, loss, min_samples_leaf, max_features, current_depth, l
     best_loss = (-1, -1, loss(y), -1, None)
 
     #Randomly chooses from all features minus the label index. Function breaks if max_features is too low or above 1.
-    k = 64
+    k = 64 #tests 64 splits for each feature rather than every possible split
 
     #If the number of data points at this node is less than min_samples_label begin splitting by label
     if ((min_samples_label is not None and len(X) <= min_samples_label) or

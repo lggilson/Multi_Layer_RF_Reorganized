@@ -131,7 +131,7 @@ class RandomForestClassifier621:
     def __init__(
         self, n_estimators=10, min_samples_leaf=3, max_features=0.3, oob_score=False, max_depth=None, label_depth=None, min_samples_label=None, thick_trunk = False
     ):
-        # super().__init__(n_estimators, oob_score=oob_score)
+        #super().__init__(n_estimators, oob_score=oob_score)
         self.n_estimators = n_estimators
         self.min_samples_leaf = min_samples_leaf
         self.max_features = max_features
@@ -148,6 +148,7 @@ class RandomForestClassifier621:
         self.n_classes = 0
 
     def fit(self, X, y):
+
         """
         Given an (X, y) training set, fit all n_estimators trees to different,
         bootstrapped versions of the training data.  Keep track of the indices of

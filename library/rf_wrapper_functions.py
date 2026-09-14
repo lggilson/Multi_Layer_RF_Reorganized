@@ -102,17 +102,17 @@ def forest(n_estimators, dataset, parameters, label_depth=None, min_samples_labe
         oob_score=oob_score,
         thick_trunk=False
     )
-    # Fit the model to the training data
+    #fit the model to the training data
     rf1.fit(X_train, y_train)
 
-    # Calculate the accuracy score or auc score for the forest
+    #calculate the accuracy score or auc score for the forest
     if metric == "score":
         accuracy = rf1.score(X_test, y_test)
     if metric == "auc":
         accuracy = rf1.auc_score(X_test, y_test)
 
     #calculate accuracy for each dataset in Xtest and place into array sourced score
-    unique_vals = np.unique(X_test[:, -1])  # get unique values in last column
+    unique_vals = np.unique(X_test[:, -1])  # get unique values in label column
     source_score = []
     for val in unique_vals:
         sourced_X = X_test[X_test[:, -1] == val]
@@ -288,8 +288,8 @@ def errorbars_stochastic_data(n_seeds, n_estimators, data, depth, parameters, me
         #print(f"Done with Forest {i}")
     
     if(plot == True):
-        accuracy_mean = np.mean(accuracy_score, axis=0)  # shape: (n_depths,)
-        accuracy_std  = np.std(accuracy_score, axis=0)   # shape: (n_depths,)
+        accuracy_mean = np.mean(accuracy_score, axis=0)
+        accuracy_std  = np.std(accuracy_score, axis=0)
 
         
         depth_range = np.arange(depth)
@@ -362,8 +362,8 @@ def errorbars_kfold_data(n_folds, n_estimators, depth, data, parameters, metric=
         #print(f"Done with Forest {i}")
     
     if(plot == True):
-        accuracy_mean = np.mean(accuracy_score, axis=0)  # shape: (n_depths,)
-        accuracy_std  = np.std(accuracy_score, axis=0)   # shape: (n_depths,)
+        accuracy_mean = np.mean(accuracy_score, axis=0)
+        accuracy_std  = np.std(accuracy_score, axis=0)
 
         
         depth_range = np.arange(depth)
@@ -438,8 +438,8 @@ def msl_errorbars_kfold_data(n_folds, n_estimators, n_forests, data, parameters,
     msl_set = np.linspace(len(dataset.X_train), parameters.min_samples_leaf, num=n_forests, dtype=int)
 
     if(plot == True):
-        accuracy_mean = np.mean(accuracy_score, axis=0)  # shape: (n_depths,)
-        accuracy_std  = np.std(accuracy_score, axis=0)   # shape: (n_depths,)
+        accuracy_mean = np.mean(accuracy_score, axis=0)
+        accuracy_std  = np.std(accuracy_score, axis=0)
 
         plt.errorbar(msl_set, accuracy_mean, yerr = accuracy_std)
         plt.xlabel('Label Unmask Minimum Samples')
@@ -554,7 +554,7 @@ def plot_forests_by_fold(accuracy_score, dataset, parameters, depth_type = "dept
             ax.set_title(f"Fold {fold_idx}")
             ax.set_xticks(x_values)
 
-        # hide any unused subplot slots (e.g. 5 folds in a 2x3 grid leaves one empty)
+        # hide any unused subplot slots
         for j in range(n_folds, len(axes)):
             axes[j].axis('off')
 
